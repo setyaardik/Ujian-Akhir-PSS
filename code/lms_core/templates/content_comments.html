@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments for {{ content.name }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Comments for Content: {{ content.name }}</h1>
+        <p><strong>Course:</strong> {{ content.course_id.name }}</p>
+        <a href="{% url 'teacher_dashboard' %}" class="btn">Back to Dashboard</a>
+    </header>
+
+    <main>
+        <section>
+            <h2>Comments</h2>
+            <ul>
+                {% for comment in comments %}
+                <li>
+                    <p><strong>{{ comment.member_id.user_id.username }}</strong>: {{ comment.comment }}</p>
+                    <p>
+                        <small>Posted on: {{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                    </p>
+                    {% if user == content.course_id.teacher %}
+                    <form method="POST" action="{% url 'moderate_comment' comment.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">
+                            {% if comment.is_approved %} Unapprove {% else %} Approve {% endif %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </li>
+                {% empty %}
+                <li>No comments available for this content.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

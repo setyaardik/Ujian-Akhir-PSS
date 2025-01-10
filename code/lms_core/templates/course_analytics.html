@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Analytics</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Analytics for {{ course.name }}</h1>
+    </header>
+    <main>
+        <p><strong>Total Members:</strong> {{ stats.total_members }}</p>
+        <p><strong>Total Contents:</strong> {{ stats.total_contents }}</p>
+        <p><strong>Total Comments:</strong> {{ stats.total_comments }}</p>
+        <a href="{% url 'teacher_dashboard' %}" class="btn">Back to Dashboard</a>
+    </main>
+</body>
+</html>

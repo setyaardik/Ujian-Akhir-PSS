@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome, {{ user.username }}</h1>
+    </header>
+
+    <main>
+        <section>
+            <p><strong>Total Courses Created:</strong> {{ course_count }}</p>
+        </section>
+        
+        <section>
+            <h2>Your Courses</h2>
+            <a href="{% url 'batch_enroll_students' %}" class="btn">Batch Enroll Students</a>
+            <ul class="course-list">
+                {% for course in courses %}
+                <li>
+                    <h3>{{ course.name }}</h3>
+                    <p>{{ course.description }}</p>
+                    <div>
+                        <a href="{% url 'course_analytics' course.id %}" class="btn btn-analytics">View Analytics</a>
+                    </div>
+                    <p><strong>Contents:</strong></p>
+                    <ul class="content-list">
+                        {% for content in course.coursecontent_set.all %}
+                        <li>
+                            <strong>{{ content.name }}</strong>
+                            <a href="{% url 'content_comments' content.id %}" class="btn btn-comments">View Comments</a>
+                        </li>
+                        {% empty %}
+                        <li>No contents available for this course.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% empty %}
+                <p>You have no courses yet.</p>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

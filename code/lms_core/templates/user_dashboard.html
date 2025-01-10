@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>User Dashboard</h1>
+    </header>
+    <main>
+        <p><strong>Courses Joined:</strong> {{ stats.courses_joined }}</p>
+        <p><strong>Comments Made:</strong> {{ stats.comments_made }}</p>
+
+        <section>
+            <!-- Tombol menuju halaman profil pengguna -->
+            <a href="{% url 'show_profile' request.user.id %}" class="btn btn-show-profile">Show Profile</a>
+        </section>
+    </main>
+</body>
+</html>

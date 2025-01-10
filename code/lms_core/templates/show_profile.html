@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Profile</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script>
+        // Function to show pop-up
+        function showPopup(message) {
+            alert(message); // Pop-up browser
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Profile of {{ profile.first_name }} {{ profile.last_name }}</h1>
+    </header>
+    <main>
+        <!-- Notifikasi Pop-Up -->
+        {% if message %}
+        <script>
+            showPopup("{{ message }}");
+        </script>
+        {% endif %}
+
+        <section>
+            <p><strong>Email:</strong> {{ profile.email }}</p>
+        </section>
+        <section>
+            <a href="{% url 'edit_profile' %}" class="btn btn-edit">Edit Profile</a>
+        </section>
+    </main>
+</body>
+</html>
