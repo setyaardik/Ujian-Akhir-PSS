@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Bookmarks</title>
-<<<<<<< HEAD
     <style>
         /* Global Styles */
         body {
@@ -100,9 +99,6 @@
             color: #777;
         }
     </style>
-=======
-    <link rel="stylesheet" href="/static/css/style.css">
->>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
 </head>
 <body>
     <header>
@@ -114,11 +110,7 @@
             {% for bookmark in bookmarks %}
             <li>
                 <h3>{{ bookmark.content.name }}</h3>
-<<<<<<< HEAD
                 <p>Course: <strong>{{ bookmark.content.course_id.name }}</strong></p>
-=======
-                <p>Course: {{ bookmark.content.course_id.name }}</p>
->>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
                 <form method="POST" action="{% url 'delete_bookmark' bookmark.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-delete">Remove Bookmark</button>

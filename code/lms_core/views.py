@@ -1,10 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.http import JsonResponse
-<<<<<<< HEAD
 from lms_core.models import Course, Comment, CourseContent, CourseMember, UserProfile, Bookmark, CompletionTracking, Certificate
-=======
-from lms_core.models import Course, Comment, CourseContent, CourseMember, UserProfile, Bookmark
->>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
 from django.core import serializers
 from django.contrib.auth.models import User
 from django.utils.timezone import now
@@ -219,7 +215,6 @@ def available_courses_view(request):
     user = request.user
     enrolled_course_ids = CourseMember.objects.filter(user_id=user, roles="std").values_list("course_id", flat=True)
     available_courses = Course.objects.exclude(id__in=enrolled_course_ids)
-<<<<<<< HEAD
     return render(request, "available_courses.html", {"available_courses": available_courses})
 
 @login_required
@@ -315,6 +310,3 @@ def delete_certificate(request, certificate_id):
 def logout_view(request):
     logout(request)
     return redirect('login') 
-=======
-    return render(request, "available_courses.html", {"available_courses": available_courses})
->>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4

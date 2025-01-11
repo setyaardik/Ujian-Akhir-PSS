@@ -90,7 +90,6 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.content.name}"
-<<<<<<< HEAD
     
 class CompletionTracking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="completions")
@@ -112,5 +111,3 @@ class Certificate(models.Model):
 
     def __str__(self):
         return f"Certificate for {self.user.username} - {self.course.name}"
-=======
->>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
