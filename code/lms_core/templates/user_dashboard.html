@@ -4,19 +4,172 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        nav {
+            margin-right: 1rem;
+        }
+
+        nav .btn-logout {
+            background-color: #ff4d4d;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        nav .btn-logout:hover {
+            background-color: #e63939;
+        }
+
+        main {
+            margin: 2rem auto;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        section h2 {
+            margin-bottom: 1rem;
+            color: #4CAF50;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-complete {
+            background-color: #4CAF50;
+        }
+
+        .btn-complete:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.enrolled-courses > li {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        ul.enrolled-courses h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        ul.enrolled-courses ul li {
+            background: #f9f9f9;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        ul.enrolled-courses ul li h4 {
+            margin: 0;
+        }
+
+        ul.enrolled-courses ul li p {
+            margin: 0.5rem 0 0;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>User Dashboard</h1>
+        <h1>Welcome, {{ user.username }}</h1>
+        <nav>
+            <form action="{% url 'logout' %}" method="POST" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout">Logout</button>
+            </form>
+        </nav>
     </header>
     <main>
-        <p><strong>Courses Joined:</strong> {{ stats.courses_joined }}</p>
-        <p><strong>Comments Made:</strong> {{ stats.comments_made }}</p>
+        <section>
+            <p><strong>Courses Joined:</strong> {{ stats.courses_joined }}</p>
+            <p><strong>Comments Made:</strong> {{ stats.comments_made }}</p>
+        </section>
 
         <section>
-            <!-- Tombol menuju halaman profil pengguna -->
-            <a href="{% url 'show_profile' request.user.id %}" class="btn btn-show-profile">Show Profile</a>
+            <a href="{% url 'show_profile' request.user.id %}" class="btn">View Profile</a>
+            <a href="{% url 'show_bookmarks' %}" class="btn">View Bookmarks</a>
+            <a href="{% url 'available_courses' %}" class="btn">View Available Courses</a>
+            <a href="{% url 'show_completion' %}" class="btn">View Completed Contents</a>        
+        </section>
+
+        <section>
+            <h2>Your Enrolled Courses</h2>
+            <ul class="enrolled-courses">
+                {% for course_member in enrolled_courses %}
+                <li>
+                    <h3>{{ course_member.course_id.name }}</h3>
+                    <p>{{ course_member.course_id.description }}</p>
+                    <ul>
+                        {% for content in course_member.course_id.coursecontent_set.all %}
+                        <li>
+                            <h4>{{ content.name }}</h4>
+                            <p>{{ content.description }}</p>
+                            <form action="{% url 'add_completion' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="content_id" value="{{ content.id }}">
+                                <button type="submit" class="btn btn-complete">Mark as Completed</button>
+                            </form>
+                        </li>
+                        {% empty %}
+                        <li>No contents available for this course.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% empty %}
+                <p>You are not enrolled in any courses yet.</p>
+                {% endfor %}
+            </ul>
         </section>
     </main>
 </body>

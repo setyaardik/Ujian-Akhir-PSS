@@ -4,10 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Georgia", serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .certificate-container {
+            width: 90%;
+            max-width: 900px;
+            border: 10px solid #4CAF50;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #ffffff, #e6f7e9);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+
+        .certificate-header h1 {
+            font-size: 2.8rem;
+            color: #4CAF50;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .certificate-header h2 {
+            font-size: 2rem;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .certificate-header h3 {
+            font-size: 1.8rem;
+            margin: 5px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        .certificate-body p {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .certificate-body strong {
+            font-size: 1.5rem;
+            color: #4CAF50;
+        }
+
+        .certificate-footer {
+            margin-top: 30px;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .certificate-footer p {
+            margin: 5px 0;
+        }
+
+        .certificate-seal {
+            margin-top: 20px;
+        }
+
+        .certificate-seal img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .certificate-signature {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .signature {
+            font-size: 1rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .signature-line {
+            width: 200px;
+            height: 1px;
+            background-color: #333;
+            margin: 5px auto 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Certificate of Completion</h1>
-    <p>Congratulations {{ user.username }}, you have completed {{ course.name }}!</p>
+    <div class="certificate-container">
+        <div class="certificate-header">
+            <h1>Certificate of Completion</h1>
+            <h2>Presented to</h2>
+            <h3>{{ certificate.user.first_name }} {{ certificate.user.last_name }}</h3>
+        </div>
+        <div class="certificate-body">
+            <p>
+                For successfully completing the course:
+                <strong>{{ certificate.course.name }}</strong>
+            </p>
+            <p>Completion Date: {{ certificate.created_at|date:"F j, Y" }}</p>
+        </div>
+        <div class="certificate-seal">
+            <img src="/static/images/seal.png" alt="Certificate Seal">
+        </div>
+        <div class="certificate-footer">
+            <div class="certificate-signature">
+                <div class="signature">
+                    <p>Authorized by</p>
+                    <div class="signature-line"></div>
+                    <p>{{ certificate.course.teacher.first_name }} {{ certificate.course.teacher.last_name }}</p>
+                </div>
+                <div class="signature">
+                    <p>Certificate Coordinator</p>
+                    <div class="signature-line"></div>
+                    <p>Learning Management System</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

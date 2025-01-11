@@ -4,27 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batch Enroll Students</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #28a745, #81c784);
+            color: #fff;
+        }
+
+        header {
+            background-color: #1e7e34;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #1e7e34;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #6c757d;
+            text-align: center;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #495057;
+        }
+    </style>
 </head>
 <body>
-    <h1>Batch Enroll Students</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <label for="course">Select Course:</label>
-        <select name="course_id" required>
-            {% for course in courses %}
-            <option value="{{ course.id }}">{{ course.name }}</option>
-            {% endfor %}
-        </select><br><br>
+    <header>
+        <h1>Batch Enroll Students</h1>
+    </header>
+    <main>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="course">Select Course:</label>
+            <select name="course_id" id="course" required>
+                {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.name }}</option>
+                {% endfor %}
+            </select>
 
-        <label for="students">Select Students:</label>
-        <select name="student_ids" multiple required>
-            {% for student in students %}
-            <option value="{{ student.id }}">{{ student.username }}</option>
-            {% endfor %}
-        </select><br><br>
+            <label for="students">Select Students:</label>
+            <select name="student_ids" id="students" multiple required>
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.username }}</option>
+                {% endfor %}
+            </select>
 
-        <button type="submit">Enroll Students</button>
-    </form>
+            <button type="submit">Enroll Students</button>
+        </form>
+        <a href="{% url 'teacher_dashboard' %}" class="btn-back">Back to Dashboard</a>
+    </main>
 </body>
 </html>

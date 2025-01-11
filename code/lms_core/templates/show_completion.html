@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed Contents</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        section {
+            margin-bottom: 2rem;
+        }
+
+        .completed-courses, .completion-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .completed-courses li, .completion-list li {
+            margin: 1rem 0;
+            padding: 1.5rem;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-group {
+            margin-bottom: 2rem;
+        }
+
+        .course-group h3 {
+            margin-bottom: 1rem;
+            color: #4CAF50;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+        }
+
+        .btn-delete:hover {
+            background-color: #d32f2f;
+        }
+
+        .btn-view {
+            background-color: #007BFF;
+        }
+
+        .btn-view:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-generate {
+            background-color: #FFA000;
+        }
+
+        .btn-generate:hover {
+            background-color: #FF8F00;
+        }
+
+        .btn-back {
+            margin-top: 2rem;
+            background-color: #007BFF;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            text-align: center;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Completed Contents</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Your Completed Courses</h2>
+            <ul class="completed-courses">
+                {% for course_data in completed_courses %}
+                <li>
+                    <div>
+                        <h3>{{ course_data.course.name }}</h3>
+                    </div>
+                    <div>
+                        {% if course_data.certificate %}
+                            <a href="{% url 'view_certificate' course_data.certificate.id %}" class="btn btn-view">View Certificate</a>
+                            <form action="{% url 'delete_certificate' course_data.certificate.id %}" method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete">Delete Certificate</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'generate_certificate' course_data.course.id %}" method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-generate">Generate Certificate</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </li>
+                {% empty %}
+                <p>No courses completed yet.</p>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2>Contents Grouped by Course</h2>
+            {% for course, completions in courses_with_completion.items %}
+            <div class="course-group">
+                <h3>{{ course.name }}</h3>
+                <ul class="completion-list">
+                    {% for completion in completions %}
+                    <li>
+                        <span>{{ completion.content.name }}</span>
+                        <form action="{% url 'delete_completion' completion.id %}" method="POST" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% empty %}
+            <p>No contents completed yet.</p>
+            {% endfor %}
+        </section>
+
+        <a href="{% url 'user_dashboard' %}" class="btn btn-back">Back to Dashboard</a>
+    </main>
+</body>
+</html>

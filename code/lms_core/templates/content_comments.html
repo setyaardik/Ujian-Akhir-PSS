@@ -4,7 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comments for {{ content.name }}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #00BCD4, #2196F3);
+            color: #fff;
+        }
+
+        header {
+            background-color: #2196F3;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        header .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FFC107;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        header .btn:hover {
+            background-color: #FFA000;
+        }
+
+        main {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 800px;
+            background: #fff;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        section h2 {
+            margin-bottom: 15px;
+            color: #2196F3;
+            border-bottom: 2px solid #00BCD4;
+            padding-bottom: 5px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #f9f9f9;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+
+        ul li p {
+            margin: 5px 0;
+        }
+
+        ul li p strong {
+            font-size: 1.1rem;
+            color: #2196F3;
+        }
+
+        ul li form {
+            margin-top: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #1976D2;
+        }
+
+        .btn-approve {
+            background-color: #4CAF50;
+        }
+
+        .btn-approve:hover {
+            background-color: #388E3C;
+        }
+
+        .btn-unapprove {
+            background-color: #FF5722;
+        }
+
+        .btn-unapprove:hover {
+            background-color: #E64A19;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -20,13 +136,12 @@
                 {% for comment in comments %}
                 <li>
                     <p><strong>{{ comment.member_id.user_id.username }}</strong>: {{ comment.comment }}</p>
-                    <p>
-                        <small>Posted on: {{ comment.created_at|date:"Y-m-d H:i" }}</small>
-                    </p>
+                    <p><small>Posted on: {{ comment.created_at|date:"Y-m-d H:i" }}</small></p>
                     {% if user == content.course_id.teacher %}
                     <form method="POST" action="{% url 'moderate_comment' comment.id %}" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn">
+                        <button type="submit" 
+                                class="btn {% if comment.is_approved %}btn-unapprove{% else %}btn-approve{% endif %}">
                             {% if comment.is_approved %} Unapprove {% else %} Approve {% endif %}
                         </button>
                     </form>
