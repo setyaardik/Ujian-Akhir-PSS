@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+<<<<<<< HEAD
 from lms_core.views import index, testing, addData, editData, deleteData, register, user_dashboard, login_view, show_profile, edit_profile, teacher_dashboard, batch_enroll_students, content_comments, moderate_comment, course_analytics, show_bookmarks, add_bookmark, delete_bookmark, available_courses_view, show_completion, add_completion, delete_completion, view_certificate, generate_certificate,delete_certificate, logout_view
+=======
+from lms_core.views import index, testing, addData, editData, deleteData, register, user_dashboard, login_view, show_profile, edit_profile, teacher_dashboard, batch_enroll_students, content_comments, moderate_comment, course_analytics, show_bookmarks, add_bookmark, delete_bookmark, available_courses_view
+>>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
 from lms_core.api import apiv1
 
 urlpatterns = [
@@ -40,6 +44,7 @@ urlpatterns = [
     path('bookmarks/add/', add_bookmark, name='add_bookmark'), 
     path('bookmarks/delete/<int:bookmark_id>/', delete_bookmark, name='delete_bookmark'),
     path("available-courses/", available_courses_view, name="available_courses"),
+<<<<<<< HEAD
     path("completion/add/", add_completion, name="add_completion"),
     path("completion/", show_completion, name="show_completion"),
     path("completion/delete/<int:completion_id>/", delete_completion, name="delete_completion"),
@@ -47,4 +52,7 @@ urlpatterns = [
     path("completion/generate/<int:course_id>/", generate_certificate, name="generate_certificate"),
     path("certificate/delete/<int:certificate_id>/", delete_certificate, name="delete_certificate"),
     path('', login_view, name="login"),
+=======
+    path('', index),
+>>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
 ]

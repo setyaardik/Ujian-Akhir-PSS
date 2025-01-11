@@ -123,12 +123,15 @@
 <body>
     <header>
         <h1>Welcome, {{ user.username }}</h1>
+<<<<<<< HEAD
         <nav>
             <form action="{% url 'logout' %}" method="POST" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn-logout">Logout</button>
             </form>
         </nav>
+=======
+>>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
     </header>
     <main>
         <section>
@@ -137,10 +140,16 @@
         </section>
 
         <section>
+<<<<<<< HEAD
             <a href="{% url 'show_profile' request.user.id %}" class="btn">View Profile</a>
             <a href="{% url 'show_bookmarks' %}" class="btn">View Bookmarks</a>
             <a href="{% url 'available_courses' %}" class="btn">View Available Courses</a>
             <a href="{% url 'show_completion' %}" class="btn">View Completed Contents</a>        
+=======
+            <a href="{% url 'show_profile' request.user.id %}" class="btn btn-show-profile">View Profile</a>
+            <a href="{% url 'show_bookmarks' %}" class="btn btn-show-bookmarks">View Bookmarks</a>
+            <a href="{% url 'available_courses' %}" class="btn">View Available Courses</a>            
+>>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
         </section>
 
         <section>
@@ -150,6 +159,7 @@
                 <li>
                     <h3>{{ course_member.course_id.name }}</h3>
                     <p>{{ course_member.course_id.description }}</p>
+<<<<<<< HEAD
                     <ul>
                         {% for content in course_member.course_id.coursecontent_set.all %}
                         <li>
@@ -165,6 +175,8 @@
                         <li>No contents available for this course.</li>
                         {% endfor %}
                     </ul>
+=======
+>>>>>>> a6d12e6590c6164bff9e0c814824e42b97c0d8d4
                 </li>
                 {% empty %}
                 <p>You are not enrolled in any courses yet.</p>
