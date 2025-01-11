@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.http import JsonResponse
-from lms_core.models import Course, Comment, CourseContent, CourseMember, UserProfile
+from lms_core.models import Course, Comment, CourseContent, CourseMember, UserProfile, Bookmark
 from django.core import serializers
 from django.contrib.auth.models import User
 from django.utils.timezone import now
@@ -83,7 +83,10 @@ def user_dashboard(request):
         "courses_created": Course.objects.filter(teacher=user).count(),
         "comments_made": Comment.objects.filter(member_id__user_id=user).count(),
     }
-    return render(request, "user_dashboard.html", {"stats": stats})
+    enrolled_courses = CourseMember.objects.filter(user_id=user, roles="std").select_related("course_id")
+    enrolled_course_ids = enrolled_courses.values_list("course_id", flat=True)
+    available_courses = Course.objects.exclude(id__in=enrolled_course_ids)
+    return render(request, "user_dashboard.html", {"stats": stats, "enrolled_courses": enrolled_courses, "available_courses": available_courses})
 
 @login_required
 def show_profile(request, user_id):
@@ -174,3 +177,45 @@ def course_analytics(request, course_id):
         "total_comments": Comment.objects.filter(content_id__course_id=course).count(),
     }
     return render(request, "course_analytics.html", {"course": course, "stats": stats})
+
+def is_teacher(user):
+    return user.groups.filter(name='Teachers').exists()
+
+def is_user(user):
+    return not user.groups.filter(name='Teachers').exists()
+
+@login_required
+def add_bookmark(request):
+    if request.method == "POST":
+        content_id = request.POST.get("content_id")
+        try:
+            content = CourseContent.objects.get(id=content_id)
+            bookmark, created = Bookmark.objects.get_or_create(user=request.user, content=content)
+            if created:
+                return redirect(f"/bookmarks/?message=Bookmark added successfully")
+            else:
+                return redirect(f"/bookmarks/?message=Bookmark already exists")
+        except CourseContent.DoesNotExist:
+            return redirect(f"/bookmarks/?message=Content not found")
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+@login_required
+def show_bookmarks(request):
+    bookmarks = Bookmark.objects.filter(user=request.user).select_related("content", "content__course_id")
+    return render(request, "show_bookmarks.html", {"bookmarks": bookmarks})
+
+@login_required
+def delete_bookmark(request, bookmark_id):
+    try:
+        bookmark = Bookmark.objects.get(id=bookmark_id, user=request.user)
+        bookmark.delete()
+        return redirect(f"/bookmarks/?message=Bookmark deleted successfully")
+    except Bookmark.DoesNotExist:
+        return redirect(f"/bookmarks/?message=Bookmark not found")
+
+@login_required
+def available_courses_view(request):
+    user = request.user
+    enrolled_course_ids = CourseMember.objects.filter(user_id=user, roles="std").values_list("course_id", flat=True)
+    available_courses = Course.objects.exclude(id__in=enrolled_course_ids)
+    return render(request, "available_courses.html", {"available_courses": available_courses})

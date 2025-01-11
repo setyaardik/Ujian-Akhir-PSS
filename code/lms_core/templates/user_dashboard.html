@@ -8,15 +8,32 @@
 </head>
 <body>
     <header>
-        <h1>User Dashboard</h1>
+        <h1>Welcome, {{ user.username }}</h1>
     </header>
     <main>
-        <p><strong>Courses Joined:</strong> {{ stats.courses_joined }}</p>
-        <p><strong>Comments Made:</strong> {{ stats.comments_made }}</p>
+        <section>
+            <p><strong>Courses Joined:</strong> {{ stats.courses_joined }}</p>
+            <p><strong>Comments Made:</strong> {{ stats.comments_made }}</p>
+        </section>
 
         <section>
-            <!-- Tombol menuju halaman profil pengguna -->
-            <a href="{% url 'show_profile' request.user.id %}" class="btn btn-show-profile">Show Profile</a>
+            <a href="{% url 'show_profile' request.user.id %}" class="btn btn-show-profile">View Profile</a>
+            <a href="{% url 'show_bookmarks' %}" class="btn btn-show-bookmarks">View Bookmarks</a>
+            <a href="{% url 'available_courses' %}" class="btn">View Available Courses</a>            
+        </section>
+
+        <section>
+            <h2>Your Enrolled Courses</h2>
+            <ul class="enrolled-courses">
+                {% for course_member in enrolled_courses %}
+                <li>
+                    <h3>{{ course_member.course_id.name }}</h3>
+                    <p>{{ course_member.course_id.description }}</p>
+                </li>
+                {% empty %}
+                <p>You are not enrolled in any courses yet.</p>
+                {% endfor %}
+            </ul>
         </section>
     </main>
 </body>

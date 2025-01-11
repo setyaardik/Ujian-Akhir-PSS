@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from lms_core.views import index, testing, addData, editData, deleteData, register, user_dashboard, login_view, show_profile, edit_profile, teacher_dashboard, batch_enroll_students, content_comments, moderate_comment, course_analytics
+from lms_core.views import index, testing, addData, editData, deleteData, register, user_dashboard, login_view, show_profile, edit_profile, teacher_dashboard, batch_enroll_students, content_comments, moderate_comment, course_analytics, show_bookmarks, add_bookmark, delete_bookmark, available_courses_view
 from lms_core.api import apiv1
 
 urlpatterns = [
@@ -33,8 +33,12 @@ urlpatterns = [
     path("profile/edit/", edit_profile, name="edit_profile"),
     path('teacher/dashboard/', teacher_dashboard, name='teacher_dashboard'),
     path("batch-enroll/", batch_enroll_students, name="batch_enroll_students"),
-     path("contents/<int:content_id>/comments/", content_comments, name="content_comments"),
+    path("contents/<int:content_id>/comments/", content_comments, name="content_comments"),
     path("comments/<int:comment_id>/moderate/", moderate_comment, name="moderate_comment"),
     path("course/<int:course_id>/analytics/", course_analytics, name="course_analytics"),
+    path('bookmarks/', show_bookmarks, name='show_bookmarks'), 
+    path('bookmarks/add/', add_bookmark, name='add_bookmark'), 
+    path('bookmarks/delete/<int:bookmark_id>/', delete_bookmark, name='delete_bookmark'),
+    path("available-courses/", available_courses_view, name="available_courses"),
     path('', index),
 ]
