@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from lms_core.views import index, testing, addData, editData, deleteData, register, user_dashboard, login_view, show_profile, edit_profile, teacher_dashboard, batch_enroll_students, content_comments, moderate_comment, course_analytics, show_bookmarks, add_bookmark, delete_bookmark, available_courses_view, show_completion, add_completion, delete_completion, view_certificate, generate_certificate,delete_certificate, logout_view
+from lms_core.views import index, testing, addData, editData, deleteData, register, user_dashboard, login_view, show_profile_teacher,show_profile_user, edit_profile, teacher_dashboard, batch_enroll_students, content_comments, moderate_comment, course_analytics, show_bookmarks, add_bookmark, delete_bookmark, available_courses_view, show_completion, add_completion, delete_completion, view_certificate, generate_certificate,delete_certificate, logout_view, user_content_comments
 from lms_core.api import apiv1
 
 urlpatterns = [
@@ -29,12 +29,14 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('register/', register, name='register'),  # Halaman register
     path('user/dashboard/', user_dashboard, name='user_dashboard'),
-    path("profile/<int:user_id>/", show_profile, name="show_profile"),
+    path("profile_user/<int:user_id>/", show_profile_user, name="show_profile_user"),
+    path("profile_teacher/<int:user_id>/", show_profile_teacher, name="show_profile_teacher"),
     path("profile/edit/", edit_profile, name="edit_profile"),
     path('teacher/dashboard/', teacher_dashboard, name='teacher_dashboard'),
     path("batch-enroll/", batch_enroll_students, name="batch_enroll_students"),
     path("contents/<int:content_id>/comments/", content_comments, name="content_comments"),
     path("comments/<int:comment_id>/moderate/", moderate_comment, name="moderate_comment"),
+    path('content/<int:content_id>/comments/', user_content_comments, name='user_content_comments'),
     path("course/<int:course_id>/analytics/", course_analytics, name="course_analytics"),
     path('bookmarks/', show_bookmarks, name='show_bookmarks'), 
     path('bookmarks/add/', add_bookmark, name='add_bookmark'), 

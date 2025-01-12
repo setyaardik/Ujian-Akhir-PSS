@@ -134,10 +134,11 @@
         <section>
             <p><strong>Courses Joined:</strong> {{ stats.courses_joined }}</p>
             <p><strong>Comments Made:</strong> {{ stats.comments_made }}</p>
+            <p><strong>Contents Completed:</strong> {{ stats.contents_completed }}</p>
         </section>
 
         <section>
-            <a href="{% url 'show_profile' request.user.id %}" class="btn">View Profile</a>
+            <a href="{% url 'show_profile_user' request.user.id %}" class="btn">View Profile</a>
             <a href="{% url 'show_bookmarks' %}" class="btn">View Bookmarks</a>
             <a href="{% url 'available_courses' %}" class="btn">View Available Courses</a>
             <a href="{% url 'show_completion' %}" class="btn">View Completed Contents</a>        
@@ -155,11 +156,12 @@
                         <li>
                             <h4>{{ content.name }}</h4>
                             <p>{{ content.description }}</p>
-                            <form action="{% url 'add_completion' %}" method="POST">
+                            <form action="{% url 'add_completion' %}" method="POST" style="display: inline;">
                                 {% csrf_token %}
                                 <input type="hidden" name="content_id" value="{{ content.id }}">
                                 <button type="submit" class="btn btn-complete">Mark as Completed</button>
                             </form>
+                            <a href="{% url 'user_content_comments' content.id %}" class="btn btn-comments">View Comments</a>
                         </li>
                         {% empty %}
                         <li>No contents available for this course.</li>
@@ -171,6 +173,7 @@
                 {% endfor %}
             </ul>
         </section>
+        
     </main>
 </body>
 </html>

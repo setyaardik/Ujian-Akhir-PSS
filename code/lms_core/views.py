@@ -79,6 +79,7 @@ def user_dashboard(request):
         "courses_joined": CourseMember.objects.filter(user_id=user, roles="std").count(),
         "courses_created": Course.objects.filter(teacher=user).count(),
         "comments_made": Comment.objects.filter(member_id__user_id=user).count(),
+        "contents_completed": CompletionTracking.objects.filter(user=user).count(),
     }
     enrolled_courses = CourseMember.objects.filter(user_id=user, roles="std").select_related("course_id")
     enrolled_course_ids = enrolled_courses.values_list("course_id", flat=True)
@@ -86,7 +87,7 @@ def user_dashboard(request):
     return render(request, "user_dashboard.html", {"stats": stats, "enrolled_courses": enrolled_courses, "available_courses": available_courses})
 
 @login_required
-def show_profile(request, user_id):
+def show_profile_user(request, user_id):
     try:
         user = User.objects.get(pk=user_id)
         profile_data = {
@@ -95,9 +96,23 @@ def show_profile(request, user_id):
             "email": user.email
         }
         message = request.GET.get("message")
-        return render(request, "show_profile.html", {"profile": profile_data, "user_id": user_id, "message": message})
+        return render(request, "show_profile_user.html", {"profile": profile_data, "user_id": user_id, "message": message})
     except User.DoesNotExist:
-        return render(request, "show_profile.html")
+        return render(request, "show_profile_user.html")
+    
+@login_required
+def show_profile_teacher(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+        profile_data = {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email
+        }
+        message = request.GET.get("message")
+        return render(request, "show_profile_teacher.html", {"profile": profile_data, "user_id": user_id, "message": message})
+    except User.DoesNotExist:
+        return render(request, "show_profile_teacher.html")
 
 @login_required
 def edit_profile(request):
@@ -127,9 +142,13 @@ def batch_enroll_students(request):
                 )
                 if created:
                     enrolled_students.append(student.username)
-            return JsonResponse({"message": "Students enrolled successfully", "students": enrolled_students})
+            # Tambahkan pesan sukses ke dalam context
+            messages.success(
+                request,
+                f"Students enrolled successfully: {', '.join(enrolled_students)}"
+            )
         except Course.DoesNotExist:
-            return JsonResponse({"error": "Course not found or you do not have permission"}, status=403)
+            messages.error(request, "Course not found or you do not have permission")
     courses = Course.objects.filter(teacher=request.user)
     students = User.objects.exclude(groups__name="Teachers")
     return render(request, "batch_enroll_students.html", {"courses": courses, "students": students})
@@ -163,8 +182,20 @@ def teacher_dashboard(request):
 @login_required
 def content_comments(request, content_id):
     content = get_object_or_404(CourseContent, id=content_id)
-    comments = Comment.objects.filter(content_id=content, is_approved=True)  # Gunakan `content_id`
-    return render(request, "content_comments.html", {"content": content, "comments": comments})
+    comments = Comment.objects.filter(content_id=content).select_related('member_id__user_id')
+
+    return render(request, "content_comments.html", {
+        "content": content,
+        "comments": comments,
+        "user": request.user
+    })
+
+@login_required
+def user_content_comments(request, content_id):
+    content = get_object_or_404(CourseContent, id=content_id)
+    # Ambil komentar yang sudah di-approve
+    comments = Comment.objects.filter(content_id=content, is_approved=True).select_related("member_id__user_id")
+    return render(request, "user_content_comments.html", {"content": content, "comments": comments})
 
 def course_analytics(request, course_id):
     course = get_object_or_404(Course, id=course_id, teacher=request.user)

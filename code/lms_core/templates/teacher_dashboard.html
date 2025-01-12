@@ -124,7 +124,7 @@
     <header>
         <h1>Welcome, {{ user.username }}</h1>
         <nav>
-            <a href="{% url 'show_profile' user.id %}" class="btn nav-btn">Show Profile</a>
+            <a href="{% url 'show_profile_teacher' user.id %}" class="btn nav-btn">Show Profile</a>
             <form action="{% url 'logout' %}" method="POST" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="btn logout-btn">Logout</button>

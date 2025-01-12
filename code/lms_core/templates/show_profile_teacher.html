@@ -49,7 +49,7 @@
             color: #4CAF50;
         }
 
-        .btn-edit {
+        .btn {
             display: inline-block;
             padding: 0.5rem 1rem;
             background-color: #007BFF;
@@ -61,8 +61,16 @@
             margin-top: 1rem;
         }
 
-        .btn-edit:hover {
+        .btn:hover {
             background-color: #0056b3;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
@@ -77,7 +85,8 @@
             <p><strong>Email:</strong> {{ profile.email }}</p>
         </section>
         <section>
-            <a href="{% url 'edit_profile' %}" class="btn-edit">Edit Profile</a>
+            <a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a>
+            <a href="{% url 'teacher_dashboard' %}" class="btn btn-back">Back</a>
         </section>
     </main>
 </body>
