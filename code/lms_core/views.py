@@ -122,7 +122,7 @@ def edit_profile(request):
         user.last_name = request.POST.get("last_name", user.last_name)
         user.email = request.POST.get("email", user.email)
         user.save()
-        return redirect(f"/profile/{user.id}/?message=Profile updated successfully")
+        return redirect('show_profile_user', user_id=user.id)
     return render(request, "edit_profile.html", {"user": request.user})
 
 @login_required
