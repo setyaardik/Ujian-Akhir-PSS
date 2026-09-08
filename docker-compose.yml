@@ -9,7 +9,8 @@ services:
     # command: sleep infinity
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
   postgres:
     container_name: prepare_db
     image: postgres:16
@@ -22,3 +23,8 @@ services:
       - ./postgres:/var/lib/postgresql/data
     ports:
       - "5551:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U simple_user -d simple_lms"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
